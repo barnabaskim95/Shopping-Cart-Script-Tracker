@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Vantiv. ALL RIGHTS RESERVED.
+ * Copyright 2017 Vantiv. ALL RIGHTS RESERVED.
  * eProtect Java Script API Version: 1.4
  * Includes eProtect-api2.js
  * http://www.vantiv.com/
