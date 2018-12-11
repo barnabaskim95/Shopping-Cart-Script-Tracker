@@ -7,7 +7,6 @@ r= requests.get(URL)
 html_content=r.text
 soup=BeautifulSoup(html_content,"html.parser")
 
-soup.findAll('script') #Returns array of all <script> tags
 href_tags= soup.find_all(href=True) #Array containing href tags
 script_tags= soup.find_all('script')# Array containing all scripts
 
