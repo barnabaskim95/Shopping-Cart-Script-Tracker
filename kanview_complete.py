@@ -86,37 +86,14 @@ time.sleep(2)
 #NOW we're on the payment page! Scrape for all javascript here
 print "Payment page loaded. Scraping for javascript elements."
 
-
-
 #Selenium hands of the source of the specific job page to Beautiful Soup
-soup_level2=BeautifulSoup(driver.page_source, 'lxml')
+soup_level2=BeautifulSoup(driver.page_source, 'html.parser')
 
-#Beautiful Soup grabs the HTML table on the page
-table = soup_level2.find_all('table')[0]
-    
-#Giving the HTML table to pandas to put in a dataframe object
-df = pd.read_html(str(table),header=0)
-    
-#Store the dataframe in a list
-datalist.append(df[0])
-    
-#end the Selenium browser session
+href_tags= soup_level2.find_all(href=True) #Array containing href tags
+script_tags= soup_level2.find_all('script')# Array containing all scripts
+
+#Mess with the scripts...
+#print script_tags
+
 driver.quit()
-
-#combine all pandas dataframes in the list into one big dataframe
-result = pd.concat([pd.DataFrame(datalist[i]) for i in range(len(datalist))],ignore_index=True)
-
-#convert the pandas dataframe to JSON
-json_records = result.to_json(orient='records')
-
-#pretty print to CLI with tabulate
-#converts to an ascii table
-print(tabulate(result, headers=["Employee Name","Job Title","Overtime Pay","Total Gross Pay"],tablefmt='psql'))
-
-#get current working directory
-path = os.getcwd()
-
-#open, write, and close the file
-f = open(path + "\\fhsu_payroll_data.json","w") #FHSU
-f.write(json_records)
-f.close()
+exit()
