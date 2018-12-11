@@ -1,0 +1,37 @@
+THOTS
+=====
+Break the problem into chunks that can be worked on by individuals.
+
+Barnabas set up a github for us to use to share code between us.
+
+Using bs/selenium/pandas gets us JS loading capabilities.
+
+Comparing hashes is just fine in most cases, but we should store a copy 
+of JavaScript source alongside the hashes, to simplify analysis once we 
+have an alert.  (for known "Template" cases, maybe not each copy)
+
+CHUNKS
+======
+1. Download a web page and make all constituent parts accessible for analysis
+   (e.g., the html, included css and js, ...)
+   A. Ideally, walk through a shopping -> cart -> checkout process.
+      (may be difficult given 2 days)
+      i. Manual walk through once, automated thereafter, selenium!
+2. Load a web page and constuent parts (congruent to #1, so analysis is same)
+   (Does this make sense or can we load a single page via #1 in trivial time?)
+3. Database (sqlite?) backend for history/known good
+   A. Define the schema and "how it should be used" as a discrete chunk
+      (makes it easier for other steps to move ahead)
+4. Analyze JS and flag changes
+   B. If possible, allow templating to handle known variability (eProtect)
+5. Email alerting, this is a place to "value-add" 
+   and look good in the judging.
+   A. Include hashes (for lookup) in body
+   B. Possibly diff pretty-printed versions in body for simplest response
+   C. Attach "before" and "after" JS to email
+6. Work on Presentation in parallel with work because otherwise sucks
+   "Sualeh and I will help teams in uploading the presentations on 
+    Worldpay ONE site. You don’t need to worry about that." (we do?)
+7. Add Credit Card checkout to hackathon.wopr.cc
+
+
