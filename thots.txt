@@ -1,0 +1,65 @@
+THOTS
+=====
+Break the problem into chunks that can be worked on by individuals.
+
+Barnabas set up a github for us to use to share code between us.
+
+Using bs/selenium/pandas gets us JS loading capabilities.
+
+Comparing hashes is just fine in most cases, but we should store a copy 
+of JavaScript source alongside the hashes, to simplify analysis once we 
+have an alert.  (for known "Template" cases, maybe not each copy)
+
+CHUNKS
+======
+1. Walk a web site checkout process and grab all parts of the card entry page
+   A. "Parts" is especially all inline and reference-loaded JavaScript
+   B. Expect a manual process to "build" the walker, but automated thereafter
+2. Load a web page and constuent parts (congruent to #1, so analysis is same)
+   (Does this make sense or can we load a single page via #1 in trivial time?)
+3. Database (sqlite?) backend for history/known good
+   A. Define the schema and "how it should be used" as a discrete chunk
+      (makes it easier for other steps to move ahead)
+4. Analyze JS and flag changes
+   B. If possible, allow templating to handle known variability (eProtect)
+5. Email alerting, this is a place to "value-add" 
+   and look good in the judging.
+   A. Include hashes (for lookup) in body
+   B. Possibly diff pretty-printed versions in body for simplest response
+   C. Attach "before" and "after" JS to email
+6. Work on Presentation in parallel with work because otherwise sucks
+   "Sualeh and I will help teams in uploading the presentations on 
+    Worldpay ONE site. You don’t need to worry about that." (we do?)
+7. Add Credit Card checkout to hackathon.wopr.cc
+
+
+PRESENTATION
+============
+Cover: "we're cool"
+
+Slide 1: "JavaScript and eCommerce"
+  - Cool and powerful checkouts require JavaScript
+  - The Browser treats *all* JavaScript *equally*
+  - Attackers who insert JavaScript can extract cards
+
+Slide 2: "Not Getting Caught"
+  - Simple attack: Compromise web server, insert JavaScript
+  - Can be caught by FIM (or not *cough* BA *cough*)
+  - Remember *equally* - any load, including 3rd parties, counts
+    - We rely on this ourselves! (eProtect)
+  - Exposure time measured in *months* in most cases
+
+Slide 3: "Schwerpunkt"
+  - It's what the Browser *ends up with* that matters
+  - So we'll act like a browser
+  - Simple tripwire mechanism - "if something changes, look at it!"
+  - Like FIM, but for the living breathing page the Browser consumes
+
+Slide 4: "Shiny"
+  - Describe technology flow briefly
+
+Slide 5: "PROFIT!"
+  - This solution is a saleable business offering
+  - It meets a need that is otherwise unaddressed today
+  - It aligns with our role as a trusted partner to our merchants
+  - What's not to like?
