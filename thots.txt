@@ -35,3 +35,33 @@ CHUNKS
 7. Add Credit Card checkout to hackathon.wopr.cc
 
 
+PRESENTATION
+============
+Cover: "we're cool"
+
+Slide 1: "JavaScript and eCommerce"
+  - Cool and powerful checkouts require JavaScript
+  - The Browser treats *all* JavaScript *equally*
+  - Attackers who insert JavaScript can extract cards
+
+Slide 2: "Not Getting Caught"
+  - Simple attack: Compromise web server, insert JavaScript
+  - Can be caught by FIM (or not *cough* BA *cough*)
+  - Remember *equally* - any load, including 3rd parties, counts
+    - We rely on this ourselves! (eProtect)
+  - Exposure time measured in *months* in most cases
+
+Slide 3: "Schwerpunkt"
+  - It's what the Browser *ends up with* that matters
+  - So we'll act like a browser
+  - Simple tripwire mechanism - "if something changes, look at it!"
+  - Like FIM, but for the living breathing page the Browser consumes
+
+Slide 4: "Shiny"
+  - Describe technology flow briefly
+
+Slide 5: "PROFIT!"
+  - This solution is a saleable business offering
+  - It meets a need that is otherwise unaddressed today
+  - It aligns with our role as a trusted partner to our merchants
+  - What's not to like?
