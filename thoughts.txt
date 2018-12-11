@@ -1,4 +1,4 @@
-THOTS
+THOUGHTS
 =====
 Break the problem into chunks that can be worked on by individuals.
 
@@ -31,7 +31,7 @@ CHUNKS
    C. Attach "before" and "after" JS to email
 6. Work on Presentation in parallel with work because otherwise sucks
    "Sualeh and I will help teams in uploading the presentations on 
-    Worldpay ONE site. You don’t need to worry about that." (we do?)
+    Worldpay ONE site. You donâ€™t need to worry about that." (we do?)
 7. Add Credit Card checkout to hackathon.wopr.cc
 
 
