@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
@@ -6,16 +7,31 @@ import re
 import pandas as pd
 from tabulate import tabulate
 import os
-
+import time
 
 #launch url
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
 buttonone = "action more button"
 
 # create a new Firefox session
-driver = webdriver.Firefox()
-driver.implicitly_wait(30)
+#driver = webdriver.Firefox()
+#profile = webdriver.FirefoxProfile()
+#profile.set_preference("browser.cache.disk.enable", False)
+#profile.set_preference("browser.cache.memory.enable", False)
+#profile.set_preference("browser.cache.offline.enable", False)
+#profile.set_preference("network.http.use-cache", False)
+#driver = webdriver.Firefox(profile)
+
+#create Chrome session
+chrome_options = Options()  
+chrome_options.add_argument("--headless")  
+chrome_options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'  
+#driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriver"), chrome_options=chrome_options)
+driver = webdriver.Chrome("chromedriver")
+
 driver.get(url)
+print "Waiting for page to completely load..."
+time.sleep(12)
 
 #After opening the url above, Selenium clicks the specified link
 #python_button = driver.find_element_by_id( buttonone ) #FHSU
@@ -29,19 +45,22 @@ x = 0 #counter
 
 #Selenium searches for tocart form and adds one then tries to check out
 #http://toolsqa.com/selenium-webdriver/findelement-and-findelements-command/
-link = soup_level1.get_text()
-print link
+productpage = soup_level1.get_text()
+
+#print link
+
 #find an add to cart button
+print "Preparing to add item to cart..."
 python_button = driver.find_element_by_id("product-addtocart-button")
 python_button.click()
-
-print("added??")
+print("product added. Looking for cart.")
+time.sleep(5)
 
 #click the cart button to view the cart
-python_button = driver.find_element_by_class_name("action showcart")
+#python_button = driver.find_element_by_partial_link_text('checkout')
+python_button = driver.find_element_by_xpath("action showcart")
 python_button.click()
-
-print("checkout")
+print("Viewing Cart")
 
 #click the checkout button...
 
