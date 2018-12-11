@@ -12,11 +12,9 @@ have an alert.  (for known "Template" cases, maybe not each copy)
 
 CHUNKS
 ======
-1. Download a web page and make all constituent parts accessible for analysis
-   (e.g., the html, included css and js, ...)
-   A. Ideally, walk through a shopping -> cart -> checkout process.
-      (may be difficult given 2 days)
-      i. Manual walk through once, automated thereafter, selenium!
+1. Walk a web site checkout process and grab all parts of the card entry page
+   A. "Parts" is especially all inline and reference-loaded JavaScript
+   B. Expect a manual process to "build" the walker, but automated thereafter
 2. Load a web page and constuent parts (congruent to #1, so analysis is same)
    (Does this make sense or can we load a single page via #1 in trivial time?)
 3. Database (sqlite?) backend for history/known good
