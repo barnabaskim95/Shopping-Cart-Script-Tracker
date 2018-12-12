@@ -45,5 +45,5 @@ def send_mail(send_from, send_to, subject, text, new_script, old_script=None, se
 
 
 # 'THISIS...' would be replaced with the actual variable containing the script text.
-#send_mail('cartwire@wopr.cc', ['gowen@swynwyr.com'], 'Cartwire Alert for {}'.format(site), 
+#send_mail('cartwire@wopr.cc', ['hackathon@swynwyr.com'], 'Cartwire Alert for {}'.format(site), 
 #        body, 'THISISNEWSCRIPT', 'THISISOLDSCRIPT')

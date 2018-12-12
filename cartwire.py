@@ -178,9 +178,9 @@ for tag in script_tags:
       emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change. Diff output is below:\n{}".format(filename_orig, site,diffFile(filename_orig,filename))
       #different email subject when a change vs a whitelist event or when we don't have an idea of the original
       if whitelisted is False:
-         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
+         send_mail('cartwire@wopr.cc',['hackathon@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
       elif whitelisted is True:
          #send the same filename as both the original and new for now
-         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),emailbody,filename,filename_orig)
+         send_mail('cartwire@wopr.cc',['hackathon@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),emailbody,filename,filename_orig)
 driver.quit()
 exit()
