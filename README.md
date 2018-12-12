@@ -9,7 +9,8 @@ To run this program:
 
 2. In the command line, in the project directory, run: cp sqlite.db.1 sqlite.db
 
-3. Run py cartwire.py   . On first run, there might be a bunch of missing packages- this is expected. Complete the following steps:
+3. Run py cartwire.py   
+      On first run, there might be a bunch of missing packages- this is expected. Complete the following steps:
       1. Install Firefox
       2. Install missing python modules with: pip3 install module_name
           Example modules include: selenium, bs4, tabulate, pandas
