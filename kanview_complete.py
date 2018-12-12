@@ -1,3 +1,5 @@
+#!/usr/bin/env python3 
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -32,7 +34,7 @@ driver = webdriver.Firefox(profile)
 #driver = webdriver.Chrome("chromedriver")
 
 driver.get(url)
-print "Waiting for page to completely load..."
+print("Waiting for page to completely load...")
 time.sleep(12)
 
 #After opening the url above, Selenium clicks the specified link
@@ -52,7 +54,7 @@ productpage = soup_level1.get_text()
 #print link
 
 #find an add to cart button
-print "Preparing to add item to cart..."
+print("Preparing to add item to cart...")
 python_button = driver.find_element_by_id("product-addtocart-button")
 python_button.click()
 print("Product added. Looking for cart.")
@@ -84,7 +86,7 @@ driver.find_element_by_id("braintree").click()
 time.sleep(2)
 
 #NOW we're on the payment page! Scrape for all javascript here
-print "Payment page loaded. Scraping for javascript elements."
+print("Payment page loaded. Scraping for javascript elements.")
 
 #Selenium hands of the source of the specific job page to Beautiful Soup
 soup_level2=BeautifulSoup(driver.page_source, 'html.parser')
