@@ -21,6 +21,7 @@ from smtpalert import send_mail
 from utils import diffFile
 
 #TEST URLS
+site = "hackathon.wopr.cc"
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
 urlcheckout = "https://hackathon.wopr.cc/index.php/checkout/"
 urlpayment = "https://hackathon.wopr.cc/index.php/checkout/#payment"
@@ -172,12 +173,12 @@ for tag in script_tags:
          filename_orig = filename.split(" (")[0] + ".js"
 
       #email body
-      emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change. Diff output is below:\n{}".format(filename_orig, base_url,diffFile(filename_orig,filename))
+      emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change. Diff output is below:\n{}".format(filename_orig, site,diffFile(filename_orig,filename))
       #different email subject when a change vs a whitelist event or when we don't have an idea of the original
       if whitelisted is False or tag.get('src') is None:
          send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
       else:
          #send the same filename as both the original and new for now
-         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename)
+         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),emailbody,filename,filename)
 driver.quit()
 exit()

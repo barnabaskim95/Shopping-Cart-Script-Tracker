@@ -17,8 +17,7 @@ from email.utils import COMMASPACE, formatdate
 #determine whether this is an innocent or malicious change.
 #""".format(script_name, site)
 
-def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
-              server="45.79.161.82"):
+def send_mail(send_from, send_to, subject, text, new_script, old_script=None, server="127.0.0.1"):
     assert isinstance(send_to, list)
 
     msg = MIMEMultipart()
@@ -31,13 +30,13 @@ def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
     
     with open(new_script, "rb") as fil:
        part = MIMEApplication( fil.read(),Name=basename(new_script))
-    part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(new_script))
+    part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(new_script)+".txt")
     msg.attach(part)
     
     if old_script:
        with open(old_script, "rb") as fil:
           part = MIMEApplication( fil.read(),Name=basename(old_script))
-       part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(old_script))
+       part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(old_script)+".txt")
        msg.attach(part)
 
     smtp = smtplib.SMTP(server)
