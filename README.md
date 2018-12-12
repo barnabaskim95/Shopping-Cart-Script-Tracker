@@ -17,17 +17,17 @@ To run this program:
       3. Install geckodriver from here: https://github.com/mozilla/geckodriver/releases
       
       For Windows: 
-        On Windows, your PATH system variables must be updated to include Selenium and geckodriver. 
-        1. Navigate to Control Panel\System and Security\System 
-        2. Click on 'Advanced system settings'
-        3. Click 'Environment variables'
-        4. In 'System Variables', select the 'Path' variable. Click 'edit'
-        5. In the pop-up, click 'edit text'
-        6. Move the cursor to the end of the highlighted 'variable value', past the semicolon. 
-        7. Place the system location for the directories containing the following:
-            a. Python 
-            b. Selenium
-            c. Geckodriver
-4. Rerun py cartwire.py
+        On Windows, your PATH system variables must be updated to include Selenium and geckodriver. <br/>
+        1. Navigate to Control Panel\System and Security\System <br/>
+        2. Click on 'Advanced system settings'<br/>
+        3. Click 'Environment variables'<br/>
+        4. In 'System Variables', select the 'Path' variable. Click 'edit'<br/>
+        5. In the pop-up, click 'edit text'<br/>
+        6. Move the cursor to the end of the highlighted 'variable value', past the semicolon. <br/>
+        7. Place the system location for the directories containing the following:<br/>
+            a. Python <br/>
+            b. Selenium<br/>
+            c. Geckodriver<br/>
+4. Rerun py cartwire.py<br/>
 
 Enjoy!
