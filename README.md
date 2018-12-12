@@ -25,9 +25,9 @@ To run this program:
         5. In the pop-up, click 'edit text'<br/>
         6. Move the cursor to the end of the highlighted 'variable value', past the semicolon. <br/>
         7. Place the system location for the directories containing the following:<br/>
-        -    1. Python <br/>
-        -    2. Selenium<br/>
-                  c.    Geckodriver<br/>
+            -    Python<br/>
+            -    Selenium<br/>
+            -    Geckodriver<br/>
 4. Rerun py cartwire.py<br/>
 
 Enjoy!
