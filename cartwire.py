@@ -155,6 +155,7 @@ for tag in script_tags:
             whitelisted = False
       if whitelisted is True:
          output += "Change detected, but matched whitelist elements.\n"
+         print ("Change detected, but matched whitelist elements.\n"
          #print (output)
       else:
          #if it doesn't pass whitelist then we have a change
