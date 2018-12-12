@@ -28,16 +28,17 @@ def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
     msg['Subject'] = subject
 
     msg.attach(MIMEText(text))
-
-    part = MIMEApplication(new_script, Name='script-new-js.txt')
-    part['Content-Disposition'] = 'attachment; filename="script-new-js.txt"'
+    
+    with open(new_script, "rb") as fil:
+       part = MIMEApplication( fil.read(),Name=basename(newscript))
+    part['Content-Disposition'] = 'attachment; filename="%s" % basename(new_script)'
     msg.attach(part)
     
     if old_script:
-        part = MIMEApplication(old_script, Name='script-old-js.txt')
-        part['Content-Disposition'] = 'attachment; filename="script-old-js.txt"'
-        msg.attach(part)
-
+       with open(new_script, "rb") as fil:
+          part = MIMEApplication( fil.read(),Name=basename(newscript))
+       part['Content-Disposition'] = 'attachment; filename="%s" % basename(new_script)'
+       msg.attach(part)
 
     smtp = smtplib.SMTP(server)
     smtp.sendmail(send_from, send_to, msg.as_string())
@@ -45,5 +46,5 @@ def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
 
 
 # 'THISIS...' would be replaced with the actual variable containing the script text.
-send_mail('cartwire@wopr.cc', ['gowen@swynwyr.com'], 'Cartwire Alert for {}'.format(site), 
-        body, 'THISISNEWSCRIPT', 'THISISOLDSCRIPT')
+#send_mail('cartwire@wopr.cc', ['gowen@swynwyr.com'], 'Cartwire Alert for {}'.format(site), 
+#        body, 'THISISNEWSCRIPT', 'THISISOLDSCRIPT')
