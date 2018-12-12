@@ -122,7 +122,6 @@ for tag in script_tags:
       url = tag['src'].split("?")[0]
       output += "Pulling script reference: {}\n".format(url)
       filename = wget.download(url)
-      print ("\n")
    output += "  {} filename saved.\n".format(filename)
    file = open(filename,'rb')
    file_content = file.read()
@@ -150,10 +149,11 @@ for tag in script_tags:
       #do some checking for known whitelisted script elements
       whitelisted = True
       for element in whitelistelements:
-         if file_content is not None or element not in file_content:
+         if element not in file_content:
             whitelisted = False
       if whitelisted is False:
          #if it doesn't pass whitelist then we have a change
+         output += "  Sending email to notify of change...\n"
          print (output)
          filename_orig = filename
          #determine original filename - likely by removing the " (number)" from the new name
@@ -163,15 +163,10 @@ for tag in script_tags:
          else:
             filename_orig = filename.split(" (")[0] + ".js"
          #email body
-         emailbody = """
-A change to JavaScript ({}) has been detected on {}.
-
-Please compare the attached 'old' and 'new' versions to
-determine whether this is an innocent or malicious change.
-""".format(filename_orig, base_url)
-         #send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
+         emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change.".format(filename_orig, base_url)
+         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
       else:
          print ("Change detected, but matched whitelist elements.")
-         #send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename_orig)
+         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename_orig)
 driver.quit()
 exit()
