@@ -10,13 +10,16 @@ import pandas as pd
 from tabulate import tabulate
 import os
 import time
-import sqlite3
+import wget
+import base64
+import hashlib
+import uuid
 
 def find_between(s, start, end):
    return (s.split(start)[1].split(end)[0])
 
-s = '<script src="test" actionblah</script>'
-print(find_between(s,"src=\"","\""))
+s = "<script src=\"test\" actionblah</script>"
+print find_between(s,"src=\"","\"")
 
 #launch url
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
@@ -108,11 +111,27 @@ script_tags= soup_level2.find_all('script')# Array containing all scripts
 #print script_tags
 
 for tag in script_tags:
-   try:
-      if tag['src']:
-         print("Referenced Script: {}".format(tag['src']))
-   except:
-         print("Embedded Script: {}".format(tag))
+   filename = ""
+   if tag.get('src') is None:
+      print ("Processing embedded script")
+      filename = str(uuid.uuid4()) + '.js'
+      file = open(filename,"w")
+      file.write(str(tag))
+      file.close()
+   else:
+      print ("Pulling script reference: {}".format(tag['src']))
+      url = tag['src'].split("?")[0]
+      filename = wget.download(url)
+   print ("  {} filename saved.".format(filename))
+   file = open(filename,'rb')
+   file_content = file.read()
+   file_content_encode = base64.b64encode(file_content)
+   print ("  base64 encoded for database storagecontents")
+   print ("  Calculating SHA256 hash of original file")
+   hasher = hashlib.sha256()
+   hasher.update(file_content)
+   print ("  SHA256 hash: {}".format(hasher.hexdigest()))
+   file.close()
    time.sleep(2)
 
 driver.quit()
