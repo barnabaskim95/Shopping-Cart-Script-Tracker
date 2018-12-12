@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -10,7 +10,13 @@ import pandas as pd
 from tabulate import tabulate
 import os
 import time
+import sqlite3
 
+def find_between(s, start, end):
+   return (s.split(start)[1].split(end)[0])
+
+s = "<script src=\"test\" actionblah</script>"
+print find_between(s,"src=\"","\"")
 
 #launch url
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
@@ -18,7 +24,7 @@ urlcheckout = "https://hackathon.wopr.cc/index.php/checkout/"
 urlpayment = "https://hackathon.wopr.cc/index.php/checkout/#payment"
 
 # create a new Firefox session
-driver = webdriver.Firefox()
+#driver = webdriver.Firefox()
 profile = webdriver.FirefoxProfile()
 profile.set_preference("browser.cache.disk.enable", False)
 profile.set_preference("browser.cache.memory.enable", False)
@@ -34,7 +40,7 @@ driver = webdriver.Firefox(profile)
 #driver = webdriver.Chrome("chromedriver")
 
 driver.get(url)
-print("Waiting for page to completely load...")
+print ("Waiting for page to completely load...")
 time.sleep(12)
 
 #After opening the url above, Selenium clicks the specified link
@@ -54,10 +60,10 @@ productpage = soup_level1.get_text()
 #print link
 
 #find an add to cart button
-print("Preparing to add item to cart...")
+print ("Preparing to add item to cart...")
 python_button = driver.find_element_by_id("product-addtocart-button")
 python_button.click()
-print("Product added. Looking for cart.")
+print ("Product added. Looking for cart.")
 time.sleep(5)
 
 #click the cart button to view the cart
@@ -65,28 +71,32 @@ time.sleep(5)
 #python_button = driver.find_element_by_xpath("//a[contains(@class, 'checkout')]")
 #python_button = driver.find_element_by_css_selector("minicart-wrapper")
 #python_button.click()
-#print("Moving to Checkout")
+
+print ("Moving to Checkout")
 
 #click the checkout button...
 driver.get(urlcheckout)
-time.sleep(5)
+time.sleep(10)
 
+print ("Completing shipping details.")
 #fill in shipping details
 #driver.find_element_by_xpath("//*[@id='customer-email']").SendKeys("testadfadjre@mailinator.com")
 driver.find_element_by_id("customer-email").send_keys("testadfadfadfad@mailinator.com")
 
 
 #Click Next
+print ("Skipping to payment page.")
 #or lets just skip it and go right to the payment page.
 driver.get(urlpayment)
-time.sleep(5)
+time.sleep(10)
 
 #Select Visa...
+print ("Selecting credit card payment type, and waiting for complete page load.")
 driver.find_element_by_id("braintree").click()
-time.sleep(2)
+time.sleep(10)
 
 #NOW we're on the payment page! Scrape for all javascript here
-print("Payment page loaded. Scraping for javascript elements.")
+print ("Payment page loaded. Scraping for javascript elements.")
 
 #Selenium hands of the source of the specific job page to Beautiful Soup
 soup_level2=BeautifulSoup(driver.page_source, 'html.parser')
@@ -96,6 +106,13 @@ script_tags= soup_level2.find_all('script')# Array containing all scripts
 
 #Mess with the scripts...
 #print script_tags
+
+for tag in script_tags:
+   if "src=" in tag: 
+      print find_between(tag,'src=\"','\"')
+   else:
+      print "Embedded Script:" + tag
+   time.sleep(2)
 
 driver.quit()
 exit()
