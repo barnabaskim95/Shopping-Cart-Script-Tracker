@@ -18,6 +18,7 @@ import uuid
 #local imports for tracking functions
 from filecheck import validateFile
 from smtpalert import send_mail
+from utils import diffFile
 
 #TEST URLS
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
@@ -151,22 +152,32 @@ for tag in script_tags:
       for element in whitelistelements:
          if element not in file_content:
             whitelisted = False
-      if whitelisted is False:
+      if whitelisted is True:
+         print ("Change detected, but matched whitelist elements.")
+      else:
          #if it doesn't pass whitelist then we have a change
          output += "  Sending email to notify of change...\n"
          print (output)
-         filename_orig = filename
-         #determine original filename - likely by removing the " (number)" from the new name
-         if tag.get('src') is None:
-            #todo: determine original embedded script...may need to change filename convention
-            continue
-         else:
-            filename_orig = filename.split(" (")[0] + ".js"
-         #email body
-         emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change.".format(filename_orig, base_url)
+      
+      #Build an email alert...
+
+      filename_orig = filename
+      #determine original filename - likely by removing the " (number)" from the new name
+      # ^^ a poor man's shortcut as we don't differentiate between new files and changed files
+      if tag.get('src') is None:
+         #todo: determine original embedded script...may need to change filename convention
+         #no easy way to find the original uuid filename
+         continue
+      else:
+         filename_orig = filename.split(" (")[0] + ".js"
+
+      #email body
+      emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change. Diff output is below:\n{}".format(filename_orig, base_url,diffFile(filename_orig,filename))
+      #different email subject when a change vs a whitelist event
+      if whitelisted is False:
          send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
       else:
-         print ("Change detected, but matched whitelist elements.")
-         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename_orig)
+         #send the same filename as both the original and new for now
+         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename)
 driver.quit()
 exit()
