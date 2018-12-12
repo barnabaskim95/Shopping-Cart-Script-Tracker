@@ -12,7 +12,7 @@ To run this program:
 3. Run py cartwire.py   
       On first run, there might be a bunch of missing packages- this is expected. Complete the following steps:
       1. Install Firefox
-      2. Install missing python modules with: pip3 install module_name \n
+      2. Install missing python modules with: pip3 install module_name<br/>
     Example modules include: selenium, bs4, tabulate, pandas
       3. Install geckodriver from here: https://github.com/mozilla/geckodriver/releases
       
