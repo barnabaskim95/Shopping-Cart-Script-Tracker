@@ -108,37 +108,42 @@ script_tags= soup_level2.find_all('script')# Array containing all scripts
 #Mess with the scripts...
 #print script_tags
 
+print ("Checking scripts against integrity database...")
 for tag in script_tags:
    filename = ""
+   output = ""
    if tag.get('src') is None:
-      print ("Processing embedded script")
+      output += "Processing embedded script\n"
       filename = str(uuid.uuid4()) + '.js'
       file = open(filename,"w")
       file.write(str(tag))
       file.close()
    else:
       url = tag['src'].split("?")[0]
-      print ("Pulling script reference: {}".format(url))
+      output += "Pulling script reference: {}\n".format(url)
       filename = wget.download(url)
-   print ("  {} filename saved.".format(filename))
+   output += "  {} filename saved.\n".format(filename)
    file = open(filename,'rb')
    file_content = file.read()
    file_content_encode = base64.b64encode(file_content)
-   print ("  base64 encoded for database storage")
-   print ("  Calculating SHA256 hash of original file")
+   output += "  base64 encoded for database storage\n"
+   output += "  Calculating SHA256 hash of original file\n"
    hasher = hashlib.sha256()
    hasher.update(file_content)
-   print ("  SHA256 hash: {}".format(hasher.hexdigest()))
+   output += "  SHA256 hash: {}\n".format(hasher.hexdigest())
    file.close()
    
    #Time for integrity monitoring
-   print ("  Checking against integrity database.")
+   output += "  Change detected when checking against integrity database.\n"
    base_url = url.split("://")[1].split("/")[0]
+   result = True
    if tag.get('src') is None:
-      validateFile(base_url,hasher.hexdigest(),file_content_encode,filename)
+      result = validateFile(base_url,hasher.hexdigest(),file_content_encode,filename)
    else:
-      validateFile(base_url,hasher.hexdigest(),file_content_encode,url)
-
+      result = validateFile(base_url,hasher.hexdigest(),file_content_encode,url)
+   
+   if result is False:
+      print (output)
 
 driver.quit()
 exit()
