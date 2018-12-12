@@ -17,7 +17,7 @@ import uuid
 
 #local imports for tracking functions
 from filecheck import validateFile
-
+from smtpalert import send_mail
 
 #TEST URLS
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
@@ -122,6 +122,7 @@ for tag in script_tags:
       url = tag['src'].split("?")[0]
       output += "Pulling script reference: {}\n".format(url)
       filename = wget.download(url)
+      print ("\n")
    output += "  {} filename saved.\n".format(filename)
    file = open(filename,'rb')
    file_content = file.read()
@@ -137,20 +138,40 @@ for tag in script_tags:
    output += "  Change detected when checking against integrity database.\n"
    base_url = url.split("://")[1].split("/")[0]
    result = True
+
+   #check the file against the database
    if tag.get('src') is None:
       result = validateFile(base_url,hasher.hexdigest(),file_content_encode,filename)
    else:
       result = validateFile(base_url,hasher.hexdigest(),file_content_encode,url)
    
+   #if change detected
    if result is False:
       #do some checking for known whitelisted script elements
       whitelisted = True
       for element in whitelistelements:
-         if element not in file_content:
+         if file_content is not None or element not in file_content:
             whitelisted = False
       if whitelisted is False:
+         #if it doesn't pass whitelist then we have a change
          print (output)
+         filename_orig = filename
+         #determine original filename - likely by removing the " (number)" from the new name
+         if tag.get('src') is None:
+            #todo: determine original embedded script...may need to change filename convention
+            continue
+         else:
+            filename_orig = filename.split(" (")[0] + ".js"
+         #email body
+         emailbody = """
+A change to JavaScript ({}) has been detected on {}.
+
+Please compare the attached 'old' and 'new' versions to
+determine whether this is an innocent or malicious change.
+""".format(filename_orig, base_url)
+         #send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
       else:
          print ("Change detected, but matched whitelist elements.")
+         #send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),output,filename,filename_orig)
 driver.quit()
 exit()
