@@ -154,7 +154,8 @@ for tag in script_tags:
          if element not in file_content:
             whitelisted = False
       if whitelisted is True:
-         print ("Change detected, but matched whitelist elements.")
+         output += "Change detected, but matched whitelist elements.\n"
+         #print (output)
       else:
          #if it doesn't pass whitelist then we have a change
          output += "  Sending email to notify of change...\n"
@@ -175,10 +176,10 @@ for tag in script_tags:
       #email body
       emailbody = "A change to JavaScript ({}) has been detected on {}.\n\nPlease compare the attached 'old' and 'new' versions to determine whether this is an innocent or malicious change. Diff output is below:\n{}".format(filename_orig, site,diffFile(filename_orig,filename))
       #different email subject when a change vs a whitelist event or when we don't have an idea of the original
-      if whitelisted is False or tag.get('src') is None:
+      if whitelisted is False:
          send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Change Alert for {}'.format(base_url),emailbody,filename,filename_orig)
-      else:
+      elif whitelisted is True:
          #send the same filename as both the original and new for now
-         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),emailbody,filename,filename)
+         send_mail('cartwire@wopr.cc',['gowen@swynwyr.com'], 'Cartwire Whitelist Alert for {}'.format(base_url),emailbody,filename,filename_orig)
 driver.quit()
 exit()
