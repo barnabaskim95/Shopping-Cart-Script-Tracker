@@ -16,8 +16,7 @@ import hashlib
 import uuid
 
 #local imports for tracking functions
-import utils
-import filecheck
+from filecheck import validateFile
 
 
 #TEST URLS
