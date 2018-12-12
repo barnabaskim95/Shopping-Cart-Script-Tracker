@@ -15,8 +15,8 @@ import sqlite3
 def find_between(s, start, end):
    return (s.split(start)[1].split(end)[0])
 
-s = "<script src=\"test\" actionblah</script>"
-print find_between(s,"src=\"","\"")
+s = '<script src="test" actionblah</script>'
+print(find_between(s,"src=\"","\""))
 
 #launch url
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
@@ -108,10 +108,13 @@ script_tags= soup_level2.find_all('script')# Array containing all scripts
 #print script_tags
 
 for tag in script_tags:
-   if "src=" in tag: 
-      print find_between(tag,'src=\"','\"')
+   print('Considering tag of type {}'.format(type(tag)))
+   if tag['src']:
+      print("Referenced Script: {}".format(tag['src']))
+   #if "src=" in tag: 
+      #print(find_between(tag,'src="','"'))
    else:
-      print "Embedded Script:" + tag
+      print("Embedded Script: {}".format(tag))
    time.sleep(2)
 
 driver.quit()
