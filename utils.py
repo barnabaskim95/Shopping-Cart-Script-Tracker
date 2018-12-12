@@ -3,6 +3,7 @@ import hashlib
 import difflib
 import jsbeautifier
 import re
+import base64
 
 # Hashes a file with SHA256
 def hashFile(fileName):
@@ -19,6 +20,12 @@ def hashText(text):
     hshr = hashlib.sha256()
     hshr.update(text.encode('utf-8'))
     return hshr.hexdigest()
+
+def encodeText(text):
+    return(base64.b64encode(bytes(text, 'utf-8')))
+
+def decodeText(text):
+    return(base64.b64decode(text))
 
 # Performs a unified diff on two files
 def diffFile(file1, file2):

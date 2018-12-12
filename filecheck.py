@@ -1,62 +1,58 @@
 #!/usr/bin/env python3
-from utils import hashText, diffText, stripVars
+from utils import hashText, encodeText, decodeText, diffText, stripVars
 from datetime import datetime
 import sqlite3
 conn = sqlite3.connect('sqlite.db')
 c = conn.cursor()
 
-# Query database for file
-def queryFile(site, fileName):
-    c.execute('SELECT * FROM hashes WHERE site=? AND fileName=?', (site,fileName))
+def diffCheck(hash1, hash2):
+    c.execute('SELECT * FROM hashdata WHERE hash=?', (hash1,))
     r = c.fetchone()
-    if(r):
-        return r
-    else:
-        return False
 
-# Add new file to database
-def addFile(site, fileName, fileHash, fileData):
-    r = c.execute('INSERT INTO hashes (site,filename,hash,data, created, updated) VALUES(?,?,?,?,?,?)', (site,fileName,fileHash, fileData,datetime.now(),datetime.now()))
-    conn.commit()
-    if(r):
-        return True
-    else:
-        return False
+    c.execute('SELECT * FROM hashdata WHERE hash=?', (hash2,))
+    s = c.fetchone()
+
+    data1 = decodeText(r[1])
+    data2 = decodeText(s[1])
+
+    res = diffText(data1, data2)
+    print(res)
+    return res
 
 # Checks for existing file and validates hash. If not found, add new entry.
-def validateFile(site, fileName, keys):
-    res = stripVars(fileName, keys)
-    fhash = hashText(res)
-    r = queryFile(site, fileName)
-    if(r):
-        lastHash = r[3]
-        lastData = r[4]
-        print("Last:    " + lastHash)
-        print("Current: " + fhash)
-        if(fhash == lastHash):
-            print("Pass! " + fileName + " hash value is the same!")
-            r = c.execute('INSERT INTO results (site,filename,result,old_hash,new_hash,timestamp) VALUES(?,?,?,?,?,?)', (site, fileName, 'pass', lastHash, fhash, datetime.now()))
-            conn.commit()
-            return True
-        else:
-            diff = diffText(lastData, res)
-            print("Fail! " + fileName + " hash value has changed!")
-            print(diff)
-            r = c.execute('INSERT INTO results (site,filename,result,old_hash,new_hash,diff,timestamp) VALUES(?,?,?,?,?,?,?)', (site, fileName, 'fail', lastHash, fhash, diff, datetime.now()))
-            conn.commit()
-            return False
-    else:
-        print("Add new file hash")
-        r = addFile(site, fileName, fhash, res)
-        if(r):
-            c.execute('INSERT INTO results (site,filename,result,old_hash,new_hash,timestamp) VALUES(?,?,?,?,?,?)', (site, fileName, 'new', fhash, fhash, datetime.now()))
-            conn.commit()
-            print("Done")
-        else:
-            print("Error")
+def validateFile(site, hash, data, name):
+    timestamp = datetime.now()
 
+    # Check if hash and data already exist
+    c.execute('SELECT * FROM hashdata WHERE hash=? AND data=?', (hash,data))
+    r = c.fetchone()
+    
+    # If not, add a new entry
+    if not r:
+        c.execute('INSERT INTO hashdata (hash,data) VALUES(?,?)', (hash, data))
+        conn.commit()
+    
+    # Add a new check record
+    c.execute('INSERT INTO hashes (site,hash,name,timestamp) VALUES(?,?,?,?)', (site,hash,name,timestamp))
+    conn.commit()
+
+    # See if the same site and hash match a previous entry
+    c.execute('SELECT * FROM hashes WHERE site=? AND hash=? AND timestamp < ?', (site, hash, timestamp))
+    r = c.fetchone()
+    
+    # If previous entry found, no change detected
+    if(r):
+        print("Previous entry exists")
+        return True
+    # If no previous entry, a potential change has been detected
+    else:
+        print("Previous entry does not exist")
+        print("CHANGE DETECTED!")
+        return False
+    
 def main():
-    validateFile("hackathon.wopr.cc", "eProtect-api2.js", [])
+    f = open("eProtect-api2.js", "r").read()
+    validateFile("hackathon.wopr.cc", hashText(f), encodeText(f), "eProtect-api2.js")
 
 if __name__ == "__main__":
     main()
