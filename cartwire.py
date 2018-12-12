@@ -15,13 +15,12 @@ import base64
 import hashlib
 import uuid
 
-def find_between(s, start, end):
-   return (s.split(start)[1].split(end)[0])
+#local imports for tracking functions
+import utils
+import filecheck
 
-s = "<script src=\"test\" actionblah</script>"
-print find_between(s,"src=\"","\"")
 
-#launch url
+#TEST URLS
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
 urlcheckout = "https://hackathon.wopr.cc/index.php/checkout/"
 urlpayment = "https://hackathon.wopr.cc/index.php/checkout/#payment"
@@ -119,20 +118,28 @@ for tag in script_tags:
       file.write(str(tag))
       file.close()
    else:
-      print ("Pulling script reference: {}".format(tag['src']))
       url = tag['src'].split("?")[0]
+      print ("Pulling script reference: {}".format(url))
       filename = wget.download(url)
    print ("  {} filename saved.".format(filename))
    file = open(filename,'rb')
    file_content = file.read()
    file_content_encode = base64.b64encode(file_content)
-   print ("  base64 encoded for database storagecontents")
+   print ("  base64 encoded for database storage")
    print ("  Calculating SHA256 hash of original file")
    hasher = hashlib.sha256()
    hasher.update(file_content)
    print ("  SHA256 hash: {}".format(hasher.hexdigest()))
    file.close()
-   time.sleep(2)
+   
+   #Time for integrity monitoring
+   print ("  Checking against integrity database.")
+   base_url = url.split("://")[1].split("/")[0]
+   if tag.get('src') is None:
+      validateFile(base_url,hasher.hexdigest(),file_content_encode,filename)
+   else:
+      validateFile(base_url,hasher.hexdigest(),file_content_encode,url)
+
 
 driver.quit()
 exit()
