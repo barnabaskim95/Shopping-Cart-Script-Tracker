@@ -108,13 +108,11 @@ script_tags= soup_level2.find_all('script')# Array containing all scripts
 #print script_tags
 
 for tag in script_tags:
-   print('Considering tag of type {}'.format(type(tag)))
-   if tag['src']:
-      print("Referenced Script: {}".format(tag['src']))
-   #if "src=" in tag: 
-      #print(find_between(tag,'src="','"'))
-   else:
-      print("Embedded Script: {}".format(tag))
+   try:
+      if tag['src']:
+         print("Referenced Script: {}".format(tag['src']))
+   except:
+         print("Embedded Script: {}".format(tag))
    time.sleep(2)
 
 driver.quit()
