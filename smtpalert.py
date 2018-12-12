@@ -7,15 +7,15 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
 
-site = "hackathon.wopr.cc"
-script_name = "3rdparty.js"
+#site = "hackathon.wopr.cc"
+#script_name = "3rdparty.js"
 
-body = """
-A change to JavaScript ({}) has been detected on {}.
-
-Please compare the attached 'old' and 'new' versions to 
-determine whether this is an innocent or malicious change.
-""".format(script_name, site)
+#body = """
+#A change to JavaScript ({}) has been detected on {}.
+#
+#Please compare the attached 'old' and 'new' versions to 
+#determine whether this is an innocent or malicious change.
+#""".format(script_name, site)
 
 def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
               server="45.79.161.82"):
@@ -30,14 +30,14 @@ def send_mail(send_from, send_to, subject, text, new_script, old_script=None,
     msg.attach(MIMEText(text))
     
     with open(new_script, "rb") as fil:
-       part = MIMEApplication( fil.read(),Name=basename(newscript))
-    part['Content-Disposition'] = 'attachment; filename="%s" % basename(new_script)'
+       part = MIMEApplication( fil.read(),Name=basename(new_script))
+    part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(new_script))
     msg.attach(part)
     
     if old_script:
-       with open(new_script, "rb") as fil:
-          part = MIMEApplication( fil.read(),Name=basename(newscript))
-       part['Content-Disposition'] = 'attachment; filename="%s" % basename(new_script)'
+       with open(old_script, "rb") as fil:
+          part = MIMEApplication( fil.read(),Name=basename(old_script))
+       part['Content-Disposition'] = 'attachment; filename="{}"'.format(basename(old_script))
        msg.attach(part)
 
     smtp = smtplib.SMTP(server)
