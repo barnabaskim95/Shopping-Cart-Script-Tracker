@@ -23,7 +23,7 @@ from filecheck import validateFile
 url = "https://hackathon.wopr.cc/index.php/didi-sport-watch.html"
 urlcheckout = "https://hackathon.wopr.cc/index.php/checkout/"
 urlpayment = "https://hackathon.wopr.cc/index.php/checkout/#payment"
-
+whitelistelements = ["window.checkoutConfig","Didi Sport Watch","dc09e1c71e492175f875827bcbf6a37c","isDisplayShippingBothPrices","\"customer_email\":null"]
 # create a new Firefox session
 #driver = webdriver.Firefox()
 profile = webdriver.FirefoxProfile()
@@ -143,7 +143,14 @@ for tag in script_tags:
       result = validateFile(base_url,hasher.hexdigest(),file_content_encode,url)
    
    if result is False:
-      print (output)
-
+      #do some checking for known whitelisted script elements
+      whitelisted = True
+      for element in whitelistelements:
+         if element not in file_content:
+            whitelisted = False
+      if whitelisted is False:
+         print (output)
+      else:
+         print ("Change detected, but matched whitelist elements.")
 driver.quit()
 exit()
