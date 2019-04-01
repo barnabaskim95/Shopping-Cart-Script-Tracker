@@ -1,4 +1,4 @@
-# hackathon
+# Shopping cart Script tracker
 Worldpay Hackathon (Dec 2018 ed.)
 
 This is an automated script-tracking program that detects changes to a web page at payment checkout for a sample site. The program detects page changes that attacks from groups such as Magecart implemented to skim credit cards. These changes are stored into a file, and an email alert is automatically sent to an email of your choice. 
